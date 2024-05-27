@@ -57,6 +57,8 @@ We can create secret directly using the kubectl command or using YAML files.
           username: <encoded value that we get above>
         
 
+        kubectl apply -f secret.yml
+
 2. Create a secret using a file. 
 
         echo "topsecret file that want to keep in pod" > secret.txt 
@@ -89,6 +91,8 @@ We can create secret directly using the kubectl command or using YAML files.
                 name: my-secret1
 
 
+        kubectl apply -f secretpod1.yml
+
     This pod is referencing 'my-secret1' and adding those secrets as environment variables in the pod.
 
     We can check the environment variables inside the pod using the following command:
@@ -118,8 +122,10 @@ We can create secret directly using the kubectl command or using YAML files.
             - name: MY_PASSWORD
               valueFrom:
                 secretKeyRef:
-                    name: my-secret1
-                    key: password    
+                  name: my-secret1
+                  key: password   
+
+        kubectl apply -f secretpod2.yml             
 
     check the variable inside the pod using following command
 
@@ -151,7 +157,10 @@ We can create secret directly using the kubectl command or using YAML files.
           volumes:
           - name: mytestsecret 
             secret:
-              secretName: my-secret2   
+              secretName: my-secret2 
+
+
+        kubectl apply -f secretpod3.yml        
  
     Now we can check if the secret file is created inside the pod using following command
 
@@ -165,7 +174,75 @@ We can create secret directly using the kubectl command or using YAML files.
 
 
 
+## Docker Pull Secrets
 
+Another common scenario when working with Kubernetes secrets is authenticating with a private Docker registry. Often, we need to create pods using private images, and to pull these images, we must authenticate with the repository.
+
+
+### Creating sample pod with private image
+
+1. I have already pushed one nginx image to my private docker hub registry. Let's try to create a pod with this priavte docker image.
+
+        vi privateimage-pod.yml
+
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          name: priavteimage-pod
+        spec:
+          containers:
+          - name: priavteimage-pod
+            image: vivekjcloud/secret-test:nginx
+            ports:
+            - containerPort: 80
+
+
+    Note the image here, its a private image available in my docker hub repository.
+
+
+2. If you check the pod status, it must be showing `ErrImagePull` status.
+
+3. If you describe the pod, there you can see events such as- 
+
+    _Failed to pull image "vivekjcloud/secret-test:nginx": Error response from daemon: pull access denied for vivekjcloud/secret-test, repository does not exist or may require 'docker login': denied: requested access to the resource is denied_ 
+
+
+### Creating docker registry secret
+
+As we noticed above, the pod is in error state as it is not able to pull the docker image. Now its time to create our docker registry secret.
+
+  We need following details to create a registry secret in kubernetes
+  - `docker-server`: your registry URL such as https://hub.docker.io
+  - `docker-username`: docker registry authentication user
+  - `docker-password`: docker registry authentication password
+  - `docker-email`: your email address
+
+
+        kubectl create secret docker-registry my-docker-secret --docker-server=DOCKER_REGISTRY_SERVER --docker-username=DOCKER_USER --docker-password=DOCKER_PASSWORD --docker-email=DOCKER_EMAIL
+
+        # For this setup, I have used this command
+
+        kubectl create secret docker-registry my-docker-secret --docker-server=https://hub.docker.com --docker-username='vivekjcloud' --docker-password='mytopsecret' --docker-email=myemail@gmail.com
+
+Once created, you can list the secrets and check the type of this secret. It should be kubernetes.io/dockerconfigjson.
+
+### Define pull secret in pod YAML 
+
+Now its time to specify the pull secret in the pod yaml file. This way, the kubelet would be able to authenticate to the registry and pull the image to create the required pod.
+
+
+        vi privateimage-pod.yml
+
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          name: priavteimage-pod
+        spec:
+          containers:
+          - name: priavteimage-pod
+            image: vivekjcloud/secret-test:nginx
+            ports:
+            - containerPort: 80
 
 
 
