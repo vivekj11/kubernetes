@@ -238,6 +238,8 @@ Now its time to specify the pull secret in the pod yaml file. This way, the kube
         metadata:
           name: priavteimage-pod
         spec:
+          imagePullSecrets:
+          - name: my-docker-secret
           containers:
           - name: priavteimage-pod
             image: vivekjcloud/secret-test:nginx
