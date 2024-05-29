@@ -94,11 +94,11 @@ spec:
     - containerPort: 80
     volumeMounts:
     - name: myconfig
-        mountPath: /config
+      mountPath: /config
   volumes:
   - name: myconfig 
     configMap:
-      name: my-config2
+      name: my-configmap2
 ```
 ```
 kubectl apply -f m-pod2.yml              
@@ -113,7 +113,8 @@ kubectl apply -f m-pod2.yml
 
 ```
 vi example.yml
-
+```
+```
 apiVersion: apps/v1
 kind: Deployment
 metadata:
