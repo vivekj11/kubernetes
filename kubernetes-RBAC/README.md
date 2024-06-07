@@ -234,20 +234,24 @@ kubectl exec -it <pod name> -- bash
 
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 
+chmod +x kubectl
+
 ```
 
 6. From inside the pod, run the kubectl commands to check if we are able to list the pods/deployments. Also check if we can delete the pod.
 
 ```
 # Listing the pods in default namespace
-kubectl get pods 
+./kubectl get pods 
 
 # Try to delete the pod 
-kubectl delete pod <pod name>
+./kubectl delete pod <pod name>
 
 # Try to list the pods in kube-system namespace
-kubectl get pods -n kube-system
+./kubectl get pods -n kube-system
 
 ```
 
 Observe the above results and compare with the Role assigned to the ServiceAccount.
+
+

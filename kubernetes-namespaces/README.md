@@ -3,8 +3,9 @@
 Namespaces provide a mechanism for isolating groups of resources within a single cluster.
 It is a very good way to seggregate the work/resources based on different environments or users.  
 
-Consider our house as a kubernetes cluster and rooms as the namespace inside it. Like the rooms in a house are isolated and can be used for different purposes such as bedroom, kitchen etc, simillarly the namespaces are used for different purposes and to keep the resources isolated.
+Consider our house as a Kubernetes cluster and the rooms within it as namespaces. Just as rooms in a house are isolated and serve different purposes, such as a bedroom, kitchen, or living room, namespaces in Kubernetes are used to isolate and organize resources for different purposes.
 
+<img src="images/namespace.png" alt="Before image">
 
 ### Not all objects are in a namespace 
 
