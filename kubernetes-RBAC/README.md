@@ -41,6 +41,10 @@ similarly, we can create clusteRole, where the namespace would be omitted.
 - A RoleBinding grants permissions within a specific namespace whereas a ClusterRoleBinding grants that access cluster-wide.
 - If you want to bind a ClusterRole to all the namespaces in your cluster, you use a ClusterRoleBinding.
 
+
+<img src="../images/rbac.png" alt="Before image">
+
+
 Here is an example of a RoleBinding that grants the "pod-reader" Role to the user "jane" within the "default" namespace
 
 ```

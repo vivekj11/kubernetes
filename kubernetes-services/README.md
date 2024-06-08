@@ -10,6 +10,8 @@ This leads to a problem: if some set of Pods (call them "backends") provides fun
 
 Here comes the usage of `Services`.
 
+<img src="../images/service.png" alt="Before image">
+
 
 ## Creating a Service 
 
